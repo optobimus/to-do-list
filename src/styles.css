@@ -50,6 +50,13 @@ body {
     height: 40px;
 }
 
+.projects {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 1.5em;
+    width: 100%;
+}
 
 button svg {
     height: 1.25em;
@@ -73,6 +80,7 @@ button:hover {
 
 button.active {
     background-color: #cccccc;
+    font-weight: 600;
 }
 
 .tasks{
@@ -114,7 +122,7 @@ button.active {
 }
 
 .inputBox {
-    width: 20%;
+    width: max(20%, 150px);
     background-color: #F4F5F7;
     padding: 30px;
     display: flex;
