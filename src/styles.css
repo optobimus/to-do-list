@@ -50,10 +50,6 @@ body {
     height: 40px;
 }
 
-.main h1 {
-    white-space: nowrap;
-    width: fit-content;
-}
 
 button svg {
     height: 1.25em;
@@ -72,20 +68,73 @@ button {
 }
 
 button:hover {
-    background-color: #cccccc;
+    background-color: #dddddd;
 }
 
 button.active {
     background-color: #cccccc;
 }
 
+.tasks{
+    width: 100%;
+}
+
+.addTaskBtn {
+    background-color: white;
+    width: 100%;
+}
+
 .header {
     display: flex;
-    margin-left: 30%;
     gap: 12px;
     align-items: center;
 }
 
 .header svg {
-    height: 80px;
+    height: 30px;
+}
+
+.main {
+    padding: 0 35px;
+    min-width: 72%;
+}
+
+.main h1 {
+    white-space: nowrap;
+}
+
+.overlay {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0,0,0,0.6);
+}
+
+.inputBox {
+    width: 20%;
+    background-color: #F4F5F7;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-radius: 12px;
+}
+
+.inputField {
+    width: 100%;
+    font-size: 1.5em;
+}
+
+.inputButtons {
+    width: 100%;
+}
+
+.inputBtn {
+    width: 100%;
+    display: flex;
+    justify-content: center;
 }
