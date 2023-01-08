@@ -1,5 +1,5 @@
 import './styles.css';
-import {createMain, createProject, closeOverlay, displayProjects} from './dom';
+import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton} from './dom';
 import {todo, project} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
@@ -34,7 +34,19 @@ projectBtn.addEventListener("click", (e) => {
         }
         projects.push(project(inputField.value));
         displayProjects(projects);
+        let domProjects = document.querySelectorAll(".project");
+
+        domProjects.forEach((project) =>
+            project.addEventListener("mouseenter", (e) => {
+                displayRemoveButton(project);
+            })
+        );
+
+        domProjects.forEach((project) =>
+            project.addEventListener("mouseleave", (e) => {
+                hideRemoveButton(project);
+            })
+        );
         closeOverlay();
     });
 });
-

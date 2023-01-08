@@ -56,10 +56,40 @@ body {
     gap: 12px;
     font-size: 1.5em;
     width: 100%;
+    margin-bottom: 20px;
+}
+
+.project {
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+    width: 100%;
+    justify-content: space-between;
 }
 
 button svg {
     height: 1.25em;
+}
+
+.projects svg {
+    height: 25px;
+}
+
+
+.projectLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.projectRight {
+    display: none;
+    z-index: 10;
+}
+
+.projectRight:hover {
+    display: flex;
+    align-items: center;
 }
 
 button {
@@ -104,7 +134,7 @@ button.active {
 
 .main {
     padding: 0 35px;
-    min-width: 72%;
+    width: 72%;
 }
 
 .main h1 {
