@@ -1,5 +1,5 @@
 import './styles.css';
-import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask} from './dom';
+import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask, displayTasks} from './dom';
 import {todo, project} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
@@ -49,7 +49,7 @@ projectBtn.addEventListener("click", (e) => {
             }
             projects.push(project(inputField.value));
             displayProjects(projects);
-    
+
             closeOverlay(); 
         }
         
@@ -73,6 +73,7 @@ projectContainer.addEventListener("mouseenter", (e) => {
             });
             domProject.classList.add("active");
             createMain(domProject.querySelector("svg").cloneNode(true), domProject.textContent.trim());
+            displayTasks(projects[domProject.dataset.index].getTodos());
         });
     });
     let projectRight = document.querySelectorAll(".projectRight");
@@ -85,19 +86,25 @@ projectContainer.addEventListener("mouseenter", (e) => {
             const navBtn = document.querySelector(".navBtn.active");
             console.log(navBtn);
             createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
+
+            displayTasks(button.parentNode.getTodos());
         });
     });
 });
 
 const taskBtn = document.querySelector(".addTaskBtn");
 taskBtn.addEventListener("click", (e) => {
+    const activeProject = document.querySelector(".project.active");
     createTask();
-    const inputField = document.querySelector(".inputField");
-    const inputBox = document.querySelector(".inputBox");
+    const nameField = document.querySelector(".nameField");
+    const descriptionField = document.querySelector(".descriptionField");
+    const dateField = document.querySelector(".dateField");
+
+    const taskInputBox = document.querySelector(".taskInputBox");
     const cancelBtn = document.querySelector(".cancelBtn");
     const submitBtn = document.querySelector(".confirmBtn");
     //inputBox.setAttribute("tabindex", -1);
-    inputField.focus();
+    nameField.focus();
 
     
     cancelBtn.addEventListener("click", (e) => {
@@ -106,19 +113,62 @@ taskBtn.addEventListener("click", (e) => {
 
     
     submitBtn.addEventListener("click", (e) => {
-        projects.push(project(inputField.value));
-        displayProjects(projects);
+        const priorityButton = document.querySelector(".priorityButton.active");
+        const priority = priorityButton.id;
+        console.log(activeProject);
+        projects[activeProject.dataset.index].addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
+        console.log(projects[activeProject.dataset.index].getTodos());
+        displayTasks(projects[activeProject.dataset.index].getTodos());
 
         closeOverlay(); 
     });
 
-    inputBox.addEventListener("keyup", (e) => {
+    taskInputBox.addEventListener("keyup", (e) => {
         if (e.code === "Enter") {
             projects.push(project(inputField.value));
-            displayProjects(projects);
     
             closeOverlay(); 
         }
         
     });
+});
+
+const tasksContainer = document.querySelector(".tasks");
+tasksContainer.addEventListener("mouseenter", (e) => {
+
+    const activeProject = document.querySelector(".project.active");
+    const tasks = document.querySelectorAll(".task");
+    tasks.forEach((task) => {
+        task.addEventListener("mouseenter", (e) => {
+            displayRemoveButton(task);
+        });
+        
+        task.addEventListener("mouseleave", (event) => {
+            hideRemoveButton(task);
+        });
+    });
+    let taskRight = document.querySelectorAll(".taskRight");
+    taskRight.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            //console.log(button.parentNode.dataset.index);
+            projects[activeProject.dataset.index].removeTodo(button.parentNode.dataset.index);
+            displayTasks(projects[activeProject.dataset.index].getTodos());
+
+            const navBtn = document.querySelector(".navBtn.active");
+            console.log(navBtn);
+            createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
+        });
+    });
+
+    let checkBoxes = document.querySelectorAll(".checkBox");
+    checkBoxes.forEach((checkBox) => {
+        checkBox.addEventListener("change", () => {
+            if (checkBox.checked) {
+                checkBox.parentNode.parentNode.style.textDecoration = "line-through";
+            } else {
+                checkBox.parentNode.parentNode.style.textDecoration = "none";
+            }
+        });
+    });
+    
 });

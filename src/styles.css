@@ -244,7 +244,33 @@ label {
 
 }
 
+.tasks {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    font-size: 1.5em;
+    width: 100%;
+    margin-bottom: 20px;
+}
 
+.task {
+    display: flex;
+    align-items: center;
+    font-size: 0.8em;
+    width: 100%;
+}
+
+.taskLeft {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1;
+}
+
+.taskRight {
+    display: none;
+    z-index: 1;
+}
 
 
 input {
