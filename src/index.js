@@ -67,7 +67,7 @@ projectContainer.addEventListener("mouseenter", (e) => {
         domProject.addEventListener("mouseleave", (event) => {
             hideRemoveButton(domProject);
         });
-        domProject.addEventListener('click', (e) => {
+        domProject.firstChild.addEventListener('click', (e) => {
             domProjects.forEach((domProject) => {
                 domProject.classList.remove("active");
             });
@@ -81,6 +81,10 @@ projectContainer.addEventListener("mouseenter", (e) => {
             //console.log(button.parentNode.dataset.index);
             projects = projects.filter((project, i) => projects.indexOf(project) !== parseInt(button.parentNode.dataset.index));
             displayProjects(projects);
+
+            const navBtn = document.querySelector(".navBtn.active");
+            console.log(navBtn);
+            createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
         });
     });
 });
