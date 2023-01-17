@@ -4,7 +4,7 @@ import {todo, project} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
 const defaultProject = project("defaultProject");
-const projects = [];
+let projects = [];
 projects.push(defaultProject);
 
 navBtns.forEach((button) => 
@@ -20,33 +20,68 @@ navBtns.forEach((button) =>
 const projectBtn = document.querySelector(".addProjectBtn");
 projectBtn.addEventListener("click", (e) => {
     createProject();
-    const inputField = document.querySelector(".inputField")
-
+    const inputField = document.querySelector(".inputField");
+    const inputBox = document.querySelector(".inputBox");
     const cancelBtn = document.querySelector(".cancelBtn");
+    const submitBtn = document.querySelector(".confirmBtn");
+    //inputBox.setAttribute("tabindex", -1);
+    inputField.focus();
+
+    
     cancelBtn.addEventListener("click", (e) => {
         closeOverlay();
     });
 
-    const submitBtn = document.querySelector(".confirmBtn");
+    
     submitBtn.addEventListener("click", (e) => {
-        if (projects[0].getTitle() == "defaultProject") {
+        if (projects.length !== 0 && projects[0].getTitle() == "defaultProject") {
             projects.pop();
         }
         projects.push(project(inputField.value));
         displayProjects(projects);
-        let domProjects = document.querySelectorAll(".project");
 
-        domProjects.forEach((project) =>
-            project.addEventListener("mouseenter", (e) => {
-                displayRemoveButton(project);
-            })
-        );
-
-        domProjects.forEach((project) =>
-            project.addEventListener("mouseleave", (e) => {
-                hideRemoveButton(project);
-            })
-        );
-        closeOverlay();
+        closeOverlay(); 
+    });
+    inputBox.addEventListener("keyup", (e) => {
+        if (e.code === "Enter") {
+            if (projects.length !== 0 && projects[0].getTitle() == "defaultProject") {
+                projects.pop();
+            }
+            projects.push(project(inputField.value));
+            displayProjects(projects);
+    
+            closeOverlay(); 
+        }
+        
     });
 });
+
+const projectContainer = document.querySelector(".projects");
+projectContainer.addEventListener("mouseenter", (e) => {
+    const domProjects = document.querySelectorAll(".project");
+    domProjects.forEach((domProject) => {
+        domProject.addEventListener("mouseenter", (e) => {
+            displayRemoveButton(domProject);
+        });
+        
+        domProject.addEventListener("mouseleave", (event) => {
+            hideRemoveButton(domProject);
+        });
+        domProject.addEventListener('click', (e) => {
+            domProjects.forEach((domProject) => {
+                domProject.classList.remove("active");
+            });
+            domProject.classList.add("active");
+            createMain(domProject.querySelector("svg").cloneNode(true), domProject.textContent.trim());
+        });
+    });
+    let projectRight = document.querySelectorAll(".projectRight");
+    projectRight.forEach((button) => {
+        button.addEventListener("click", (e) => {
+            //console.log(button.parentNode.dataset.index);
+            projects = projects.filter((project, i) => projects.indexOf(project) !== parseInt(button.parentNode.dataset.index));
+            displayProjects(projects);
+        });
+    });
+});
+
