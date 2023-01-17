@@ -1,5 +1,5 @@
 import './styles.css';
-import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton} from './dom';
+import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask} from './dom';
 import {todo, project} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
@@ -89,3 +89,36 @@ projectContainer.addEventListener("mouseenter", (e) => {
     });
 });
 
+const taskBtn = document.querySelector(".addTaskBtn");
+taskBtn.addEventListener("click", (e) => {
+    createTask();
+    const inputField = document.querySelector(".inputField");
+    const inputBox = document.querySelector(".inputBox");
+    const cancelBtn = document.querySelector(".cancelBtn");
+    const submitBtn = document.querySelector(".confirmBtn");
+    //inputBox.setAttribute("tabindex", -1);
+    inputField.focus();
+
+    
+    cancelBtn.addEventListener("click", (e) => {
+        closeOverlay();
+    });
+
+    
+    submitBtn.addEventListener("click", (e) => {
+        projects.push(project(inputField.value));
+        displayProjects(projects);
+
+        closeOverlay(); 
+    });
+
+    inputBox.addEventListener("keyup", (e) => {
+        if (e.code === "Enter") {
+            projects.push(project(inputField.value));
+            displayProjects(projects);
+    
+            closeOverlay(); 
+        }
+        
+    });
+});

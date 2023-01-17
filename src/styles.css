@@ -81,14 +81,12 @@ button svg {
     display: flex;
     align-items: center;
     gap: 12px;
-    border: 1px solid green;
     flex: 1;
 }
 
 .projectRight {
     display: none;
     z-index: 10;
-    border: 1px solid red;
 }
 
 .projectRight svg {
@@ -177,6 +175,7 @@ button.active {
 .inputField {
     width: 100%;
     font-size: 1.5em;
+    border-radius: 5px;
 }
 
 .inputButtons {
@@ -187,4 +186,68 @@ button.active {
     width: 100%;
     display: flex;
     justify-content: center;
+}
+
+.taskInputBox {
+    width: max(30%, 250px);
+    background-color: #F4F5F7;
+    padding: 30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    border-radius: 12px;
+}
+
+.nameField {
+    width: 100%;
+    font-size: 1.5em;
+    border-radius: 5px;
+}
+
+.descriptionField {
+    width: 100%;
+    font-size: 1.3em;
+    border-radius: 5px;
+    height: 70px;
+}
+
+.priorityField {
+    display: flex;
+    align-items: center;
+    border: 1px solid #333333;
+    border-radius: 12px;
+    width: 100%;
+    text-align: center;
+}
+
+.priorityButton {
+    border-radius: 12px;
+    text-align: center;
+    font-size: 1.2em;
+    flex: 1 1 0px;
+}
+
+.taskInputBox .inputButtons {
+    display: flex;
+}
+
+label {
+    font-size: 1.3em;
+    margin: 0;
+}
+
+.dateField {
+    width: 100%;
+    border: 1px solid #333333;
+    border-radius: 5px;
+
+}
+
+
+
+
+input {
+    border: 1px solid #333333;
+    padding: 5px;
 }
