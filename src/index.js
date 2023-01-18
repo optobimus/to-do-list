@@ -1,11 +1,12 @@
 import './styles.css';
 import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask, displayTasks, displayTasksByDate} from './dom';
-import {todo, project} from './logic';
+import {todo, project, inbox} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
-const defaultProject = project("defaultProject");
 let projects = [];
+const defaultProject = project("Project");
 projects.push(defaultProject);
+displayProjects(projects);
 
 navBtns.forEach((button) => 
     button.addEventListener('click', (e) => {
@@ -18,6 +19,13 @@ navBtns.forEach((button) =>
             displayTasksByDate(projects, "day");
         } else if (button.textContent.trim() == "This Week") {
             displayTasksByDate(projects, "week");
+        } else {
+            displayTasks(inbox.getTodos());
+            const domProjects = document.querySelectorAll(".project");
+            domProjects.forEach((domProject) => {
+                domProject.classList.remove("active");
+                displayProjects(projects);
+            });
         }
     })
 );
@@ -37,25 +45,23 @@ projectBtn.addEventListener("click", (e) => {
         closeOverlay();
     });
 
-    
-    submitBtn.addEventListener("click", (e) => {
+    function submitProject() {
         if (projects.length !== 0 && projects[0].getTitle() == "defaultProject") {
             projects.pop();
         }
         projects.push(project(inputField.value));
         displayProjects(projects);
 
-        closeOverlay(); 
+        closeOverlay();
+    }
+    
+    submitBtn.addEventListener("click", (e) => {
+        submitProject();
     });
+
     inputBox.addEventListener("keyup", (e) => {
         if (e.code === "Enter") {
-            if (projects.length !== 0 && projects[0].getTitle() == "defaultProject") {
-                projects.pop();
-            }
-            projects.push(project(inputField.value));
-            displayProjects(projects);
-
-            closeOverlay(); 
+            submitProject();
         }
         
     });
@@ -75,6 +81,10 @@ projectContainer.addEventListener("mouseenter", (e) => {
         domProject.firstChild.addEventListener('click', (e) => {
             domProjects.forEach((domProject) => {
                 domProject.classList.remove("active");
+            });
+             
+            navBtns.forEach((button) => {
+                button.classList.remove("active");
             });
             domProject.classList.add("active");
             createMain(domProject.querySelector("svg").cloneNode(true), domProject.textContent.trim());
@@ -117,25 +127,32 @@ taskBtn.addEventListener("click", (e) => {
         closeOverlay();
     });
 
-    
-    submitBtn.addEventListener("click", (e) => {
+    function submitTask() {
         const priorityButton = document.querySelector(".priorityButton.active");
         const priority = priorityButton.id;
-        console.log(activeProject);
-        projects[activeProject.dataset.index].addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
-        console.log(projects[activeProject.dataset.index].getTodos());
-        displayTasks(projects[activeProject.dataset.index].getTodos());
 
-        closeOverlay(); 
+        if (activeProject === null) {
+            inbox.addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
+            displayTasks(inbox.getTodos());
+    
+            closeOverlay(); 
+        } else {
+            projects[activeProject.dataset.index].addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
+            console.log(projects[activeProject.dataset.index].getTodos());
+            displayTasks(projects[activeProject.dataset.index].getTodos());
+    
+            closeOverlay(); 
+        }
+    }
+
+    submitBtn.addEventListener("click", (e) => {
+        submitTask();       
     });
 
     taskInputBox.addEventListener("keyup", (e) => {
         if (e.code === "Enter") {
-            projects.push(project(inputField.value));
-    
-            closeOverlay(); 
+            submitTask();
         }
-        
     });
 });
 
