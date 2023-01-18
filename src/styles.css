@@ -66,6 +66,7 @@ body {
     font-size: 0.8em;
     width: 100%;
     z-index: 1;
+    padding: 0;
 }
 
 button svg {
@@ -82,11 +83,13 @@ button svg {
     align-items: center;
     gap: 12px;
     flex: 1;
+    padding: 12px 0 12px 12px;
 }
 
 .projectRight {
     display: none;
     z-index: 0;
+    margin: 12px 12px 12px 0;
 }
 
 .projectRight svg {

@@ -96,7 +96,8 @@ projectContainer.addEventListener("mouseenter", (e) => {
         button.addEventListener("click", (e) => {
             //console.log(button.parentNode.dataset.index);
             const activeProject = document.querySelector(".project.active");
-            activeProject.setAttribute("data-title", projects[activeProject.dataset.index].getTitle());
+
+            if (activeProject) activeProject.setAttribute("data-title", projects[activeProject.dataset.index].getTitle());
             projects = projects.filter((project, i) => projects.indexOf(project) !== parseInt(button.parentNode.dataset.index));
             displayProjects(projects, activeProject);
 
