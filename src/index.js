@@ -122,6 +122,16 @@ taskBtn.addEventListener("click", (e) => {
     //inputBox.setAttribute("tabindex", -1);
     nameField.focus();
 
+    const priorityButtons = document.querySelectorAll(".priorityButton");
+    priorityButtons.forEach((button) => {
+        button.addEventListener(("click"), (e) => {
+            priorityButtons.forEach((button) => {
+                button.classList.remove("active");
+            });
+            button.classList.add("active");
+        });
+    });
+
     
     cancelBtn.addEventListener("click", (e) => {
         closeOverlay();
@@ -188,8 +198,18 @@ tasksContainer.addEventListener("mouseenter", (e) => {
         checkBox.addEventListener("change", () => {
             if (checkBox.checked) {
                 checkBox.parentNode.parentNode.style.textDecoration = "line-through";
+                if (activeProject === null) {
+                    inbox.getTodos()[checkBox.parentNode.parentNode.dataset.index].complete();
+                } else {
+                    projects[activeProject.dataset.index].getTodos()[checkBox.parentNode.parentNode.dataset.index].complete();
+                }
             } else {
                 checkBox.parentNode.parentNode.style.textDecoration = "none";
+                if (activeProject === null) {
+                    inbox.getTodos()[checkBox.parentNode.parentNode.dataset.index].uncheck();
+                } else {
+                    projects[activeProject.dataset.index].getTodos()[checkBox.parentNode.parentNode.dataset.index].uncheck();
+                }
             }
         });
     });
