@@ -1,5 +1,5 @@
 import './styles.css';
-import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask, displayTasks} from './dom';
+import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask, displayTasks, displayTasksByDate} from './dom';
 import {todo, project} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
@@ -14,6 +14,11 @@ navBtns.forEach((button) =>
         });
         button.classList.add("active");
         createMain(button.querySelector("svg").cloneNode(true), button.textContent.trim());
+        if (button.textContent.trim() == "Today") {
+            displayTasksByDate(projects, "day");
+        } else if (button.textContent.trim() == "This Week") {
+            displayTasksByDate(projects, "week");
+        }
     })
 );
 
@@ -80,6 +85,7 @@ projectContainer.addEventListener("mouseenter", (e) => {
     projectRight.forEach((button) => {
         button.addEventListener("click", (e) => {
             //console.log(button.parentNode.dataset.index);
+
             projects = projects.filter((project, i) => projects.indexOf(project) !== parseInt(button.parentNode.dataset.index));
             displayProjects(projects);
 

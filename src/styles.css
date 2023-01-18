@@ -222,10 +222,22 @@ button.active {
 }
 
 .priorityButton {
-    border-radius: 12px;
-    text-align: center;
+    display: flex;
+    justify-content: center;
     font-size: 1.2em;
     flex: 1 1 0px;
+}
+
+.priorityButtonLow {
+    border-radius: 12px 0 0 12px;
+}
+
+.priorityButtonMedium {
+    border-radius: 0;
+}
+
+.priorityButtonHigh {
+    border-radius: 0px 12px 12px 0;
 }
 
 .taskInputBox .inputButtons {
