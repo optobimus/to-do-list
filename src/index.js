@@ -95,15 +95,18 @@ projectContainer.addEventListener("mouseenter", (e) => {
     projectRight.forEach((button) => {
         button.addEventListener("click", (e) => {
             //console.log(button.parentNode.dataset.index);
-
+            const activeProject = document.querySelector(".project.active");
+            activeProject.setAttribute("data-title", projects[activeProject.dataset.index].getTitle());
             projects = projects.filter((project, i) => projects.indexOf(project) !== parseInt(button.parentNode.dataset.index));
-            displayProjects(projects);
+            displayProjects(projects, activeProject);
 
-            const navBtn = document.querySelector(".navBtn.active");
-            console.log(navBtn);
-            createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
+            if (activeProject === button.parentNode) {
+                const navBtn = document.querySelector(".navBtn");
+                navBtn.classList.add("active");
+                createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
+                displayTasks(inbox.getTodos());
+            }
 
-            displayTasks(button.parentNode.getTodos());
         });
     });
 });
@@ -184,9 +187,14 @@ tasksContainer.addEventListener("mouseenter", (e) => {
     taskRight.forEach((button) => {
         button.addEventListener("click", (e) => {
             //console.log(button.parentNode.dataset.index);
-            projects[activeProject.dataset.index].removeTodo(button.parentNode.dataset.index);
-            displayTasks(projects[activeProject.dataset.index].getTodos());
-
+            if (activeProject === null) {
+                inbox.removeTodo(button.parentNode.dataset.index);
+                displayTasks(inbox.getTodos());
+            } else {
+                projects[activeProject.dataset.index].removeTodo(button.parentNode.dataset.index);
+                displayTasks(projects[activeProject.dataset.index].getTodos());    
+            }
+            
             const navBtn = document.querySelector(".navBtn.active");
             console.log(navBtn);
             createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
