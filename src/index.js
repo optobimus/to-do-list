@@ -4,6 +4,7 @@ import {todo, project, inbox} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
 let projects = [];
+let taskId = 0;
 const defaultProject = project("Project");
 projects.push(defaultProject);
 displayProjects(projects);
@@ -116,6 +117,7 @@ projectContainer.addEventListener("mouseenter", (e) => {
                 navBtn.classList.add("active");
                 createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
                 displayTasks(inbox.getTodos());
+                
             }
 
         });
@@ -180,14 +182,15 @@ taskBtn.addEventListener("click", (e) => {
 
         if(checkName()) {
             if (activeProject === null) {
-                inbox.addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
-                displayTasks(inbox.getTodos());
+                inbox.addTodo(todo(taskId, nameField.value, descriptionField.value, dateField.value, priority));
+                displayTasks(inbox.getTodos(), taskId, nameField.value);
             } else {
-                projects[activeProject.dataset.index].addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
-                console.log(projects[activeProject.dataset.index].getTodos());
-                displayTasks(projects[activeProject.dataset.index].getTodos());
-        
+                projects[activeProject.dataset.index].addTodo(todo(taskId, nameField.value, descriptionField.value, dateField.value, priority));
+                displayTasks(projects[activeProject.dataset.index].getTodos(), taskId, nameField.value);
+            
             }
+            
+            taskId++;
             closeOverlay(); 
         }
 
@@ -226,14 +229,33 @@ tasksContainer.addEventListener("mouseenter", (e) => {
             if (activeProject === null) {
                 inbox.removeTodo(button.parentNode.dataset.index);
                 displayTasks(inbox.getTodos());
-            } else if(activeNav.textContent.trim() === "This Week" || activeNav.textContent.trim() == "Today"){
-                projects.forEach((project) => {
-                    // search for project with task
-                    project.removeTodo(button.parentNode.dataset.index);
-                    // above function from navBtns
-                }); 
+            } else if(activeNav) {
+                console.log(activeNav.textContent.trim());
+                if (activeNav.textContent.trim() === "This Week" || activeNav.textContent.trim() == "Today"){
+                    projects.forEach((project) => {
+                        project.getTodos().forEach((todo) => {
+                            if (todo.getId() === parseInt(button.parentNode.dataset.taskid)) {
+                                project.removeTodo(button.parentNode.dataset.taskid);
+                            }
+                        });
+                        
+                        // above function from navBtns
+                    }); 
+                    if (activeNav.textContent.trim() == "Today") {
+                        displayTasksByDate(projects, "day");
+                    } else if (activeNav.textContent.trim() == "This Week") {
+                        displayTasksByDate(projects, "week");
+                    } else {
+                        displayTasks(inbox.getTodos());
+                        const domProjects = document.querySelectorAll(".project");
+                        domProjects.forEach((domProject) => {
+                            domProject.classList.remove("active");
+                            //displayProjects(projects);
+                        });
+                    }
+                }  
             } else {
-                projects[activeProject.dataset.index].removeTodo(button.parentNode.dataset.index);
+                projects[activeProject.dataset.index].removeTodo(button.parentNode.dataset.taskid);
                 displayTasks(projects[activeProject.dataset.index].getTodos());   
             }
             
