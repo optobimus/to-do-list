@@ -1,8 +1,10 @@
 import './styles.css';
-import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask, displayTasks, displayTasksByDate} from './dom';
+import {createMain, createProject, closeOverlay, displayProjects, displayRemoveButton, hideRemoveButton, createTask, displayTasks, displayTasksByDate, hideAddTaskButton, showAddTaskButton} from './dom';
 import {todo, project, inbox} from './logic';
 
 const navBtns = document.querySelectorAll(".navBtn");
+
+const projectBtn = document.querySelector(".addProjectBtn");
 let projects = [];
 let taskId = 0;
 const defaultProject = project("Project");
@@ -18,8 +20,10 @@ navBtns.forEach((button) =>
         createMain(button.querySelector("svg").cloneNode(true), button.textContent.trim());
         if (button.textContent.trim() == "Today") {
             displayTasksByDate(projects, "day");
+            hideAddTaskButton();
         } else if (button.textContent.trim() == "This Week") {
             displayTasksByDate(projects, "week");
+            hideAddTaskButton();
         } else {
             displayTasks(inbox.getTodos());
             const domProjects = document.querySelectorAll(".project");
@@ -27,6 +31,7 @@ navBtns.forEach((button) =>
                 domProject.classList.remove("active");
                 //displayProjects(projects);
             });
+            showAddTaskButton();
         }
         /*const domProjects = document.querySelectorAll(".project");
         domProjects.forEach((domProject) => {
@@ -35,7 +40,6 @@ navBtns.forEach((button) =>
     })
 );
 
-const projectBtn = document.querySelector(".addProjectBtn");
 projectBtn.addEventListener("click", (e) => {
     createProject();
     const inputField = document.querySelector(".inputField");
@@ -64,6 +68,7 @@ projectBtn.addEventListener("click", (e) => {
             closeOverlay();
         }
         
+        showAddTaskButton();
     }
     
     submitBtn.addEventListener("click", (e) => {
@@ -100,6 +105,7 @@ projectContainer.addEventListener("mouseenter", (e) => {
             domProject.classList.add("active");
             createMain(domProject.querySelector("svg").cloneNode(true), domProject.textContent.trim());
             displayTasks(projects[domProject.dataset.index].getTodos());
+            showAddTaskButton();
         });
     });
     let projectRight = document.querySelectorAll(".projectRight");
