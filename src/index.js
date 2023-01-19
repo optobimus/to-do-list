@@ -11,6 +11,8 @@ const defaultProject = project("Project");
 projects.push(defaultProject);
 displayProjects(projects);
 
+// Navigation menu (Inbox tab, Daily & Weekly expiring tasks)
+
 navBtns.forEach((button) => 
     button.addEventListener('click', (e) => {
         navBtns.forEach((button) => {
@@ -29,7 +31,6 @@ navBtns.forEach((button) =>
             const domProjects = document.querySelectorAll(".project");
             domProjects.forEach((domProject) => {
                 domProject.classList.remove("active");
-                //displayProjects(projects);
             });
             showAddTaskButton();
         }
@@ -39,6 +40,8 @@ navBtns.forEach((button) =>
         });
     })
 );
+
+// Open Add-Project-Overlay upon clicking projectBtn
 
 projectBtn.addEventListener("click", (e) => {
     createProject();
@@ -54,6 +57,8 @@ projectBtn.addEventListener("click", (e) => {
     cancelBtn.addEventListener("click", (e) => {
         closeOverlay();
     });
+
+    // Check if all projects have a unique name
 
     function submitProject() {
         let unique = true;
@@ -78,7 +83,7 @@ projectBtn.addEventListener("click", (e) => {
         submitProject();
     });
 
-    inputBox.addEventListener("keyup", (e) => {
+    inputBox.addEventListener("keyup", (e) => {     //Enter functionality
         if (e.code === "Enter") {
             submitProject();
         }
@@ -86,11 +91,13 @@ projectBtn.addEventListener("click", (e) => {
     });
 });
 
+// Project navigation, switching tabs
+
 const projectContainer = document.querySelector(".projects");
 projectContainer.addEventListener("mouseenter", (e) => {
     const domProjects = document.querySelectorAll(".project");
     domProjects.forEach((domProject) => {
-        domProject.addEventListener("mouseenter", (e) => {
+        domProject.addEventListener("mouseenter", (e) => {      // Dynamically show and hide remove button
             displayRemoveButton(domProject);
         });
         
@@ -111,6 +118,9 @@ projectContainer.addEventListener("mouseenter", (e) => {
             showAddTaskButton();
         });
     });
+
+    // Eventlistener for deleting projects 
+
     let projectRight = document.querySelectorAll(".projectRight");
     projectRight.forEach((button) => {
         button.addEventListener("click", (e) => {
@@ -132,6 +142,8 @@ projectContainer.addEventListener("mouseenter", (e) => {
         });
     });
 });
+
+// Open Add task overlay
 
 const taskBtn = document.querySelector(".addTaskBtn");
 taskBtn.addEventListener("click", (e) => {
@@ -161,6 +173,8 @@ taskBtn.addEventListener("click", (e) => {
     cancelBtn.addEventListener("click", (e) => {
         closeOverlay();
     });
+
+    //Check if taskname is unique
 
     function checkName() {
         let unique = true;
@@ -217,6 +231,8 @@ taskBtn.addEventListener("click", (e) => {
     });
 });
 
+// Eventlisteners for tasks
+
 const tasksContainer = document.querySelector(".tasks");
 tasksContainer.addEventListener("mouseenter", (e) => {
     const activeNav = document.querySelector(".navBtn.active");
@@ -231,10 +247,12 @@ tasksContainer.addEventListener("mouseenter", (e) => {
             hideRemoveButton(task);
         });
     });
+
+    // Task deletion
+
     let taskRight = document.querySelectorAll(".taskRight");
     taskRight.forEach((button) => {
         button.addEventListener("click", (e) => {
-            //console.log(button.parentNode.dataset.index);
              if(activeNav) {
                 console.log(activeNav.textContent.trim());
                 if (activeNav.textContent.trim() === "This Week" || activeNav.textContent.trim() === "Today"){
@@ -245,7 +263,6 @@ tasksContainer.addEventListener("mouseenter", (e) => {
                             }
                         });
                         
-                        // above function from navBtns
                     }); 
                     if (activeNav.textContent.trim() === "Today") {
                         displayTasksByDate(projects, "day");
@@ -256,7 +273,6 @@ tasksContainer.addEventListener("mouseenter", (e) => {
                         const domProjects = document.querySelectorAll(".project");
                         domProjects.forEach((domProject) => {
                             domProject.classList.remove("active");
-                            //displayProjects(projects);
                         });
                     }
                 }  
@@ -271,6 +287,7 @@ tasksContainer.addEventListener("mouseenter", (e) => {
         });
     });
 
+    // Function to dynamically change checkbox and thereby text style
     let checkBoxes = document.querySelectorAll(".checkBox");
     checkBoxes.forEach((checkBox) => {
         checkBox.addEventListener("change", () => {
