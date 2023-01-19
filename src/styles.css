@@ -126,6 +126,11 @@ button.active {
     font-weight: 600;
 }
 
+button.active.stealth {
+    background-color: #F4F5F7;
+    font-weight: 400;
+}
+
 .tasks{
     width: 100%;
 }

@@ -24,9 +24,13 @@ navBtns.forEach((button) =>
             const domProjects = document.querySelectorAll(".project");
             domProjects.forEach((domProject) => {
                 domProject.classList.remove("active");
-                displayProjects(projects);
+                //displayProjects(projects);
             });
         }
+        /*const domProjects = document.querySelectorAll(".project");
+        domProjects.forEach((domProject) => {
+            domProject.classList.add("stealth");
+        });*/
     })
 );
 
@@ -46,13 +50,19 @@ projectBtn.addEventListener("click", (e) => {
     });
 
     function submitProject() {
-        if (projects.length !== 0 && projects[0].getTitle() == "defaultProject") {
-            projects.pop();
+        let unique = true;
+        projects.forEach((project) => {
+            if (inputField.value === project.getTitle()) {
+                unique = false;
+                alert("A project with this name already exists");
+            }
+        });
+        if (unique) {
+            projects.push(project(inputField.value));
+            displayProjects(projects);
+            closeOverlay();
         }
-        projects.push(project(inputField.value));
-        displayProjects(projects);
-
-        closeOverlay();
+        
     }
     
     submitBtn.addEventListener("click", (e) => {
@@ -141,22 +151,47 @@ taskBtn.addEventListener("click", (e) => {
         closeOverlay();
     });
 
+    function checkName() {
+        let unique = true;
+        function setNotUnique() {
+            unique = false;
+            alert("A task with this name already exists");
+        }
+
+        if (activeProject === null) {
+            inbox.getTodos().forEach((todo) => {
+                if (nameField.value === todo.getTitle()){
+                    setNotUnique();
+                }
+            })
+        } else {
+            projects[activeProject.dataset.index].getTodos().forEach((todo) => {
+                if (nameField.value === todo.getTitle()){
+                    setNotUnique();
+                }
+            });
+        }
+        return unique;
+    }
+
     function submitTask() {
         const priorityButton = document.querySelector(".priorityButton.active");
         const priority = priorityButton.id;
 
-        if (activeProject === null) {
-            inbox.addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
-            displayTasks(inbox.getTodos());
-    
-            closeOverlay(); 
-        } else {
-            projects[activeProject.dataset.index].addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
-            console.log(projects[activeProject.dataset.index].getTodos());
-            displayTasks(projects[activeProject.dataset.index].getTodos());
-    
+        if(checkName()) {
+            if (activeProject === null) {
+                inbox.addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
+                displayTasks(inbox.getTodos());
+            } else {
+                projects[activeProject.dataset.index].addTodo(todo(nameField.value, descriptionField.value, dateField.value, priority));
+                console.log(projects[activeProject.dataset.index].getTodos());
+                displayTasks(projects[activeProject.dataset.index].getTodos());
+        
+            }
             closeOverlay(); 
         }
+
+        
     }
 
     submitBtn.addEventListener("click", (e) => {
@@ -172,7 +207,7 @@ taskBtn.addEventListener("click", (e) => {
 
 const tasksContainer = document.querySelector(".tasks");
 tasksContainer.addEventListener("mouseenter", (e) => {
-
+    const activeNav = document.querySelector(".navBtn.active");
     const activeProject = document.querySelector(".project.active");
     const tasks = document.querySelectorAll(".task");
     tasks.forEach((task) => {
@@ -191,14 +226,17 @@ tasksContainer.addEventListener("mouseenter", (e) => {
             if (activeProject === null) {
                 inbox.removeTodo(button.parentNode.dataset.index);
                 displayTasks(inbox.getTodos());
+            } else if(activeNav.textContent.trim() === "This Week" || activeNav.textContent.trim() == "Today"){
+                projects.forEach((project) => {
+                    // search for project with task
+                    project.removeTodo(button.parentNode.dataset.index);
+                    // above function from navBtns
+                }); 
             } else {
                 projects[activeProject.dataset.index].removeTodo(button.parentNode.dataset.index);
-                displayTasks(projects[activeProject.dataset.index].getTodos());    
+                displayTasks(projects[activeProject.dataset.index].getTodos());   
             }
             
-            const navBtn = document.querySelector(".navBtn.active");
-            console.log(navBtn);
-            createMain(navBtn.querySelector("svg").cloneNode(true), navBtn.textContent.trim());
         });
     });
 
